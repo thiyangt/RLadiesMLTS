@@ -33,6 +33,52 @@ background-size: contain
 `r anicon::nia("Let's visualize the coronavirus pandemic!",  size=3, colour="yellow", animate="pulse")`
 
 ---
+background-image: url(img/coronavirus.png)
+background-size: 90px
+background-position: 100% 6%
+
+# Data: coronavirus package
+
+.pull-left[
+
+```r
+install.packages("coronavirus")
+devtools::install_github("RamiKrispin/coronavirus")
+```
+
+]
+
+.pull-right[
+
+```{r, comment=NA}
+library(coronavirus)
+head(coronavirus, 8)
+```
+
+]
+
+
+---
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, comment=NA}
+library(tidyverse)
+coronavirus <- coronavirus %>% mutate(cases = replace(cases, which(cases<0), NA))
+coronavirus <- coronavirus %>% mutate(cases = replace(cases, which(cases>800000), 800))
+confirmed <- coronavirus %>% filter(type == "confirmed")
+```
+
+```{r, echo=FALSE, fig.width=15, fig.height=8, warning=FALSE, message=FALSE}
+library(plotly)
+#p <- ggplot(confirmed, aes(x=date, y=cases, col=country)) + geom_line() + ggtitle("Confirmed Cases") + theme(legend.position = "none") 
+p <- ggplot(confirmed, aes(x=date, y=cases, col=country)) + geom_line() + ggtitle("Confirmed Cases") + geom_line(data = subset(confirmed,  country == "Norway"),color = "black") + theme(legend.position = "none") 
+
+ggplotly(p)
+```
+
+---
+
+
+---
 
 class: center, middle
 
