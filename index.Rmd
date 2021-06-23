@@ -69,21 +69,105 @@ confirmed <- coronavirus %>% filter(type == "confirmed")
 
 ```{r, echo=FALSE, fig.width=15, fig.height=8, warning=FALSE, message=FALSE}
 library(plotly)
-#p <- ggplot(confirmed, aes(x=date, y=cases, col=country)) + geom_line() + ggtitle("Confirmed Cases") + theme(legend.position = "none") 
-p <- ggplot(confirmed, aes(x=date, y=cases, col=country)) + geom_line() + ggtitle("Confirmed Cases") + geom_line(data = subset(confirmed,  country == "Norway"),color = "black") + theme(legend.position = "none") 
+p <- ggplot(confirmed, aes(x=date, y=cases, col=country)) + geom_line() + ggtitle("Confirmed Cases") + theme(legend.position = "none") 
+
 
 ggplotly(p)
 ```
 
 ---
 
+```{r, echo=FALSE, fig.width=15, fig.height=8, warning=FALSE, message=FALSE}
+library(plotly)
+#p <- ggplot(confirmed, aes(x=date, y=cases, col=country)) + geom_line() + ggtitle("Confirmed Cases") + theme(legend.position = "none") 
+p <- ggplot(confirmed, aes(x=date, y=cases, col=country)) + geom_line() + ggtitle("Confirmed Cases") + geom_line(data = subset(confirmed,  country == "Norway"),color = "black", label="Norway") + theme(legend.position = "none") 
+p
+```
+
+
+---
+
+
+```{r, echo=FALSE, fig.width=15, fig.height=8, warning=FALSE, message=FALSE}
+library(plotly)
+#p <- ggplot(confirmed, aes(x=date, y=cases, col=country)) + geom_line() + ggtitle("Confirmed Cases") + theme(legend.position = "none") 
+p <- ggplot(confirmed, aes(x=date, y=cases, col=country)) + geom_line() + ggtitle("Confirmed Cases") + geom_line(data = subset(confirmed,  country == "Norway"),color = "black", label="Norway") + theme(legend.position = "none") + ylim(c(0, 800))
+p
+```
+
+---
+
+class: split-70 hide-slide-number
+background-image: url("img/jhu.png")
+background-size: cover
+
+.column.slide-in-left[
+.sliderbox.vmiddle.shade_main.center[
+.font5[Time Series Features]]]
+.column[
+]
+
+
+---
+class: split-two white
+
+.column.bg-main1[.content.vmiddle.center[
+
+## Time-domain representation
+
+```{r, comment=NA, message=FALSE, warning=FALSE, echo=FALSE}
+library(Mcomp)
+library(ggplot2)
+library(grid)
+library(gridExtra)
+library(ggrepel)
+library(png)
+library(tsfeatures)
+library(tidyverse)
+library(ggpubr)
+# Extract required series
+series_id <- c("N0001", "N0633", "N0625", "N0645","N1912", "N2012")
+six_series <- lapply(M3[series_id], function(u){u$x})
+p <- lapply(six_series,
+function(u) {autoplot(u) + xlab("") + ylab("")}
+)
+for (i in seq_along(six_series))
+p[[i]] <- p[[i]] + ggtitle(series_id[i])+theme(title =element_text(size=10, face='bold'))
+grid.arrange(grobs = p, ncol = 2)
+```
+
+]]
+
+.column.bg-main2[.content.vmiddle.center[
+
+## Feature-domain representation
+
+```{r, comment=NA, message=FALSE, warning=FALSE, echo=FALSE}
+df <- tsfeatures(six_series, c("stl_features")) %>%
+  select(trend, seasonal_strength) %>%
+  rename(seasonality = seasonal_strength) %>%
+  replace_na(list(seasonality = 0))
+df$id <- names(six_series)
+ggplot(df, aes(x = trend, y = seasonality)) +
+  geom_point(size = 5, color = 'red') +
+  xlim(0, 1) + ylim(0, 1) +
+  coord_fixed() +
+  geom_text_repel(
+    aes(label = id),
+    colour = "black",
+    size = 10,
+    box.padding = unit(0.5, "lines")
+  ) +
+  theme(legend.position = "none")
+```
+
+]]
+
+
 
 ---
 
 class: center, middle
 
-# Thanks!
+# Thank you!
 
-Slides created via the R package [**xaringan**](https://github.com/yihui/xaringan).
-
-The chakra comes from [remark.js](https://remarkjs.com), [**knitr**](https://yihui.org/knitr/), and [R Markdown](https://rmarkdown.rstudio.com).
