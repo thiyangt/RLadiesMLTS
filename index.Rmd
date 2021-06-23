@@ -109,6 +109,28 @@ background-size: cover
 
 
 ---
+
+# Time series features
+
+Transform a given time series $y=\{y_1, y_2, \cdots, y_n\}$ to a feature vector $F = (f_1(y), f_2(y), \cdots, f_p(y))'$. 
+
+
+## Examples of time series features
+
+- strength of trend
+
+- strength of seasonality
+
+- lag-1 autocorrelation
+
+- spectral entropy
+
+- proportion of zeros
+
+More information: 
+
+---
+
 class: split-two white
 
 .column.bg-main1[.content.vmiddle.center[
@@ -127,12 +149,13 @@ library(tidyverse)
 library(ggpubr)
 # Extract required series
 series_id <- c("N0001", "N0633", "N0625", "N0645","N1912", "N2012")
+color = c("#1b9e77", "#d95f02", "#7570b3", "#e7298a", "#66a61e", "#e6ab02")
 six_series <- lapply(M3[series_id], function(u){u$x})
 p <- lapply(six_series,
 function(u) {autoplot(u) + xlab("") + ylab("")}
 )
 for (i in seq_along(six_series))
-p[[i]] <- p[[i]] + ggtitle(series_id[i])+theme(title =element_text(size=10, face='bold'))
+p[[i]] <- p[[i]] +geom_line(color=color[i]) +ggtitle(series_id[i])+theme(title =element_text(size=10, face='bold'))
 grid.arrange(grobs = p, ncol = 2)
 ```
 
@@ -149,13 +172,13 @@ df <- tsfeatures(six_series, c("stl_features")) %>%
   replace_na(list(seasonality = 0))
 df$id <- names(six_series)
 ggplot(df, aes(x = trend, y = seasonality)) +
-  geom_point(size = 5, color = 'red') +
+  geom_point(size = 5, color = c("#1b9e77", "#d95f02", "#7570b3", "#e7298a", "#66a61e", "#e6ab02")) +
   xlim(0, 1) + ylim(0, 1) +
   coord_fixed() +
   geom_text_repel(
     aes(label = id),
     colour = "black",
-    size = 10,
+    size = 5,
     box.padding = unit(0.5, "lines")
   ) +
   theme(legend.position = "none")
@@ -163,7 +186,9 @@ ggplot(df, aes(x = trend, y = seasonality)) +
 
 ]]
 
+---
 
+class: show-1000
 
 ---
 
