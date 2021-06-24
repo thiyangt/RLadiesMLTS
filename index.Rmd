@@ -575,6 +575,9 @@ background-size: contain
 ---
 ## FFORMS: Feature-based FORecast Model Selection
 
+### seer (magic ball)
+
+.pull-left[
 ```{r   out.width = "20%", echo = FALSE, fig.cap=''}
 knitr::include_graphics("img/seer.png")
 ```
@@ -582,10 +585,26 @@ knitr::include_graphics("img/seer.png")
 
 ```{r, comment=NA, eval=FALSE}
 install.packages("seer")
-#devtools::install_github("thiyangt/seer")
+#library(devtools)
+#install_github("thiyangt/seer")
 library(seer)
 ```
 
+]
+
+.pull-right[
+
+Acropolis Museum, Athens, Greece
+
+
+
+```{r   out.width = "60%", echo = FALSE, fig.cap=''}
+knitr::include_graphics("img/greece.JPG")
+```
+
+
+
+]
 
 
 
