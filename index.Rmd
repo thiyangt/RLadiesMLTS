@@ -691,9 +691,6 @@ rf <- build_rf(training_set = training_set, testset= M3yearly_features,
                import=FALSE, mtry = 8)
 ```
 
-```r
-head(rf$predictions)
-```
 
 ```{r, eval=TRUE, size='tiny', comment=NA}
 head(rf$predictions)
@@ -742,39 +739,39 @@ library(explainer)
 background-image: url(img/ice1.png)
 background-size: contain
 
-## Partial dependence plots and ICE curves
+### Partial dependence plots and ICE curves
 
 
 ---
 background-image: url(img/ice2.png)
 background-size: contain
 
-## Partial dependence plots and ICE curves
+### Partial dependence plots and ICE curves
 
 ---
 
 background-image: url(img/ice3.png)
 background-size: contain
 
-## Partial dependence plots and ICE curves
+### Partial dependence plots and ICE curves
 
 ---
 background-image: url(img/ice4.png)
 background-size: contain
 
-## Partial dependence plots and ICE curves
+### Partial dependence plots and ICE curves
 
 ---
 background-image: url(img/ice5.png)
 background-size: contain
 
-## Partial dependence plots and ICE curves
+### Partial dependence plots and ICE curves
 
 
 
 ---
 
-## Partial dependency plots for hourly data: entropy
+### Partial dependency plots for hourly data: entropy
 
 -  forecastability of a time series
 
