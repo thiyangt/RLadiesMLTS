@@ -2,11 +2,11 @@
 title: "Large-Scale Time Series Forecasting"
 subtitle: ""
 author: "Thiyanga S. Talagala"
-institute: "R Ladies Bergan, Norway"
+institute: "R-Ladies Bergen, Norway"
 date: "24 June 2021"
 output:
   xaringan::moon_reader:
-    css: ["kunoichi", "ninjutsu"]
+    css: ["default","kunoichi", "ninjutsu"]
     lib_dir: index_files
     nature:
       ratio: "16:9"
@@ -14,6 +14,8 @@ output:
       highlightLines: true
       countIncrementalSlides: false
 ---
+
+
 
 background-image: url(img/jhu.png)
 background-size: contain
@@ -39,23 +41,18 @@ background-position: 100% 6%
 
 # Data: coronavirus package
 
-.pull-left[
 
 ```r
 install.packages("coronavirus")
-devtools::install_github("RamiKrispin/coronavirus")
+# devtools::install_github("RamiKrispin/coronavirus")
 ```
 
-]
-
-.pull-right[
 
 ```{r, comment=NA}
 library(coronavirus)
 head(coronavirus, 8)
 ```
 
-]
 
 
 ---
@@ -135,6 +132,8 @@ Transform a given time series $y=\{y_1, y_2, \cdots, y_n\}$ to a feature vector 
 
 More information: 
 
+Talagala, T. S., Hyndman, R. J., & Athanasopoulos, G. (2018). Meta-learning how to forecast time series. Monash Econometrics and Business Statistics Working Papers, 6, 18.
+
 ---
 
 
@@ -181,6 +180,8 @@ df$id <- names(six_series)
 ggplot(df, aes(x = trend, y = seasonality)) +
   geom_point(size = 5, color = c("#1b9e77", "#d95f02", "#7570b3", "#e7298a", "#66a61e", "#e6ab02")) +
   xlim(0, 1) + ylim(0, 1) +
+  xlab("Strength of trend") + 
+  ylab("Strength of seasonality") + 
   coord_fixed() +
   geom_text_repel(
     aes(label = id),
@@ -333,25 +334,21 @@ norway.tsibble %>% ##<<
 
 ---
 
-class: split-two white
 
+.pull-left[
 
-.column.bg-white[.content[
-
-tibble
+## tibble
 
 ```{r, comment=NA}
 confirmed 
 
 ```
 
-]]
+]
 
---
+.pull-right[
 
-.column.bg-white[.content[
-
-**ts**ibble
+## tsibble
 
 ```{r, comment=NA}
 confirmed.tsibble <- confirmed %>%
@@ -359,7 +356,7 @@ confirmed.tsibble <- confirmed %>%
 confirmed.tsibble
 ```
 
-]]
+]
 
 ---
 
@@ -397,11 +394,11 @@ features.all %>%
 
 ```{r, comment=NA, message=FALSE, warning=FALSE, echo=FALSE}
 p <- features.all %>%
-  ggplot(aes(x = trend_strength, y = seasonal_strength_week)) + 
+  ggplot(aes(y = trend_strength, x = seasonal_strength_week)) + 
   geom_point() + 
   coord_equal() + 
   xlim(c(0,1)) + ylim(c(0,1)) + 
-  labs(x = "Trend strength", y = "Seasonal strength") + 
+  labs(y = "Trend strength", x = "Seasonal strength") + 
   theme(legend.position = "none") 
 ggplotly(p)
 ```
@@ -411,18 +408,345 @@ ggplotly(p)
 
 ---
 
-```{r, comment=NA, message=FALSE, warning=FALSE}
 
+.pull-left[
 
+# Time-domain 
+
+```{r, comment=NA, message=FALSE, warning=FALSE, echo=FALSE}
+df2 <- confirmed %>% filter(country=="US")
+p1 <- autoplot(as.ts(df2$cases, frequency=c(7)), col="#1b9e77") + ggtitle("US") + ylab("")
+df3 <- confirmed %>% filter(country=="Norway")
+p2 <- autoplot(as.ts(df3$cases, frequency=c(7)), col="#d95f02") + ggtitle("Norway") + ylab("")
+df4 <- confirmed %>% filter(country=="India")
+p3 <- autoplot(as.ts(df4$cases, frequency=c(7)), col="#7570b3") + ggtitle("India") + ylab("")
+df5 <- confirmed %>% filter(country=="China")
+p4 <- autoplot(as.ts(df5$cases, frequency=c(7)), col="#e7298a") + ggtitle("China") + ylab("")
+library(patchwork)
+p1/p2/p3/p4
 ```
 
 
+]
+
+
+.pull-right[
+
+# Feature-space
+
+```{r, comment=NA, message=FALSE, warning=FALSE, echo=FALSE}
+df2 <- features.all %>% filter(country=="US")
+df3 <- features.all %>% filter(country=="Norway")
+df4 <- features.all %>% filter(country=="India")
+df5 <- features.all %>% filter(country=="China")
+
+p <- features.all %>%
+  ggplot(aes(y = trend_strength, x = seasonal_strength_week, label=country)) + 
+  geom_point() + 
+  coord_equal() + 
+  xlim(c(0,1)) + ylim(c(0,1)) + 
+  labs(y = "Trend strength", y = "Seasonal strength") + 
+  theme(legend.position = "none") + 
+    geom_point(data=df2, aes(y = trend_strength, x = seasonal_strength_week), 
+             colour="#1b9e77", 
+             size=5) +
+  geom_point(data=df3, aes(y = trend_strength, x = seasonal_strength_week), 
+             colour="#d95f02", 
+             size=5) +
+  geom_point(data=df4, aes(y = trend_strength, x = seasonal_strength_week), 
+             colour="#7570b3", 
+             size=5) +
+  geom_point(data=df5, aes(y = trend_strength, x = seasonal_strength_week), 
+             colour="#e7298a", 
+             size=5) 
+ggplotly(p)
+
+```
+
+]
 
 
 
 
 ---
-class: center, middle
 
-# Thank you!
+class: split-70 hide-slide-number
+background-image: url("img/ts.jpeg")
+background-size: cover
+
+.column.slide-in-left[
+.sliderbox.vmiddle.shade_main.center[
+.font5[Large-scale Forecasting]]]
+.column[
+]
+
+
+---
+class: inverse, center, middle
+background-image: url(img/rice1.png)
+background-size: contain
+
+# Big picture
+
+---
+
+class: inverse, center, middle
+background-image: url(img/rice2.png)
+background-size: contain
+
+# Big picture
+
+
+---
+class: inverse, center, middle
+background-image: url(img/f1.png)
+background-size: contain
+
+
+---
+class: inverse, center, middle
+background-image: url(img/f2.png)
+background-size: contain
+
+---
+class: inverse, center, middle
+background-image: url(img/f3.png)
+background-size: contain
+
+---
+class: inverse, center, middle
+background-image: url(img/f4.png)
+background-size: contain
+
+---
+class: inverse, center, middle
+background-image: url(img/f5.png)
+background-size: contain
+
+---
+class: inverse, center, middle
+background-image: url(img/f6.png)
+background-size: contain
+
+---
+class: inverse, center, middle
+background-image: url(img/f7.png)
+background-size: contain
+
+
+---
+class: inverse, center, middle
+background-image: url(img/f8.png)
+background-size: contain
+
+---
+class: inverse, center, middle
+background-image: url(img/f9.png)
+background-size: contain
+
+---
+class: inverse, center, middle
+background-image: url(img/f10.png)
+background-size: contain
+
+
+---
+class: inverse, center, middle
+background-image: url(img/f11.png)
+background-size: contain
+
+---
+class: inverse, center, middle
+background-image: url(img/f12.png)
+background-size: contain
+
+---
+class: inverse, center, middle
+background-image: url(img/f13.png)
+background-size: contain
+
+---
+## FFORMS: Feature-based FORecast Model Selection
+
+```{r}
+knitr::include_url("https://github.com/thiyangt/seer")
+```
+
+
+
+---
+
+# Example dataset
+
+```r
+library(Mcomp)
+yearlym1 <- subset(M1, "yearly")
+yearlym1
+```
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, comment=NA, size='tiny'}
+library(Mcomp)
+yearlym1 <- subset(M1, "yearly")
+yearlym1
+```
+
+
+---
+
+## Input: features
+
+```r
+library(seer)
+cal_features(yearlym1[1:2], database="M1",
+h=6, highfreq=FALSE)
+
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, comment=NA, size='tiny'}
+library(seer)
+seer::cal_features(yearlym1[1:2], database="M1", h=6, highfreq=FALSE) 
+```
+
+---
+
+## Output: class labels
+
+```r 
+seer::fcast_accuracy(tslist=yearlym1[1:2], 
+               models= c("arima","ets","rw", "theta", "nn"), 
+               database ="M1", cal_MASE, h=6, 
+               length_out = 1, 
+               fcast_save = TRUE)
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, comment=NA, size='tiny'}
+seer::fcast_accuracy(tslist=yearlym1[1:2], 
+               models= c("arima","ets","rw","theta", "nn"), 
+               database ="M1", cal_MASE, h=6, 
+               length_out = 1, 
+               fcast_save = TRUE)
+```
+
+---
+
+## Training set
+
+```r
+prepare_trainingset(accuracy_set = accuracy_m1, 
+feature_set = features_m1)$trainingset
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, comment=NA, size='tiny'}
+data(M1)
+yearly_m1 <- subset(M1, "yearly")
+accuracy_m1 <- fcast_accuracy(tslist=yearly_m1[1:2], models= c("arima","ets","rw","rwd", "theta", "nn"), database ="M1", cal_MASE, h=6, length_out = 1, fcast_save = TRUE)
+features_m1 <- cal_features(yearly_m1[1:2], database="M1", h=6, highfreq = FALSE)
+
+# prepare training set
+prepare_trainingset(accuracy_set = accuracy_m1, feature_set = features_m1)$trainingset
+```
+
+---
+
+## FFORMS classifier
+
+```r
+rf <- build_rf(training_set = training_set, 
+                testset= M3yearly_features,  
+                rf_type="ru", ntree=100, seed=1, 
+               import=FALSE, mtry = 8)
+```
+
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, comment=NA, size='tiny', comment=NA}
+# steps 3 and 4 applied to yearly series of M1 competition
+data(M1)
+yearly_m1 <- subset(M1, "yearly")
+accuracy_m1 <- fcast_accuracy(tslist=yearly_m1, models= c("arima","ets","rw","rwd", "theta", "nn"), database ="M1", cal_MASE, h=6, length_out = 1, fcast_save = TRUE)
+features_m1 <- cal_features(yearly_m1, database="M1", h=6, highfreq = FALSE)
+# prepare training set
+prep_trainingset <- prepare_trainingset(accuracy_set = accuracy_m1, feature_set = features_m1)
+training_set <- prep_trainingset$trainingset
+yearly_m3 <- subset(M3, "yearly") # M3 dataset is used as a test set
+M3yearly_features <- seer::cal_features(yearly_m3, database="M3", h=6, highfreq = FALSE)
+rf <- build_rf(training_set = training_set, testset= M3yearly_features,  
+               rf_type="ru", ntree=100, seed=1, 
+               import=FALSE, mtry = 8)
+```
+
+```r
+head(rf$predictions)
+```
+
+```{r, eval=TRUE, size='tiny', comment=NA}
+head(rf$predictions)
+```
+
+
+
+---
+class: inverse, center, middle
+background-image: url(img/forest.jpg)
+background-size: content
+
+
+---
+
+## explainer package
+
+```{r}
+knitr::include_url("https://github.com/thiyangt/explainer")
+```
+
+---
+
+## Partial dependency plots for hourly data: entropy
+
+-  forecastability of a time series
+
+.pull-left[
+
+```{r  echo = FALSE, fig.cap=''}
+knitr::include_graphics("img/entropy.png")
+```
+
+
+]
+
+.pull-right[
+
+```{r  echo = FALSE, fig.cap=''}
+knitr::include_graphics("img/en_pdp4.png")
+```
+
+
+]
+
+---
+
+
+class: middle center bg-main1
+
+
+# Thank you
+
+```{r   out.width = "20%", echo = FALSE, fig.cap=''}
+knitr::include_graphics("img/seer.png")
+```
+
+
+
+```{r, echo=FALSE}
+anicon::faa("twitter", animate="float", size=3, colour="lightblue")
+```
+
+```{r, echo=FALSE}
+anicon::faa("github", animate="float", size=3, colour="yellow")
+```
+
+# @thiyangt
+
+# Web: https://thiyanga.netlify.com/
 
