@@ -20,6 +20,8 @@ output:
 knitr::include_url("https://thiyanga.netlify.app/")
 ```
 
+Web: https://thiyanga.netlify.com/
+
 ---
 
 background-image: url(img/jhu.png)
@@ -332,7 +334,7 @@ autoplot(norway.tsibble) ##<<
 ```{r, comment=NA, message=FALSE}
 library(feasts) ##<<
 norway.tsibble %>% ##<<
-  features(Observation, feature_set(tags = 
+  features(Observation, feature_set(tags = ##<<
   c("decomposition", "intermittent", "autocorrelation"))) %>% as.data.frame()##<<
 ```
 
@@ -573,9 +575,17 @@ background-size: contain
 ---
 ## FFORMS: Feature-based FORecast Model Selection
 
-```{r}
-knitr::include_url("https://github.com/thiyangt/seer")
+```{r   out.width = "20%", echo = FALSE, fig.cap=''}
+knitr::include_graphics("img/seer.png")
 ```
+
+
+```{r, comment=NA, eval=FALSE}
+install.packages("seer")
+#devtools::install_github("thiyangt/seer")
+library(seer)
+```
+
 
 
 
@@ -699,11 +709,64 @@ background-size: content
 
 ---
 
-## explainer package
+# explainer package
 
-```{r}
-knitr::include_url("https://github.com/thiyangt/explainer")
+Machine learning interpretability tools (randomForest)
+
+- Which features are the most important?
+
+- Where are they important?
+
+- How are they important?
+
+- When and how are features linked with the prediction
+outcome?
+
+- When and how strongly do features interact with
+other features?
+
+```{r, eval=FALSE}
+devtools::install_github("thiyangt/explainer")
+library(explainer)
+
 ```
+
+---
+class: inverse, center, middle
+background-image: url(img/ice1.png)
+background-size: contain
+
+## Partial dependence plots and ICE curves
+
+
+---
+class: inverse, center, middle
+background-image: url(img/ice2.png)
+background-size: contain
+
+## Partial dependence plots and ICE curves
+
+---
+class: inverse, center, middle
+background-image: url(img/ice3.png)
+background-size: contain
+
+## Partial dependence plots and ICE curves
+
+---
+class: inverse, center, middle
+background-image: url(img/ice4.png)
+background-size: contain
+
+## Partial dependence plots and ICE curves
+
+---
+background-image: url(img/ice5.png)
+background-size: contain
+
+## Partial dependence plots and ICE curves
+
+
 
 ---
 
@@ -728,6 +791,27 @@ knitr::include_graphics("img/en_pdp4.png")
 
 
 ]
+
+
+---
+
+# Interaction effect
+
+Interaction between linearity and seasonal lag at
+seasonally-differenced series
+
+![](img/dtwopdp1-1.png)
+
+
+---
+
+# Interaction effect
+
+Interaction between linearity and seasonal lag at
+seasonally-differenced series
+
+![](img/dtwopdp2-1.png)
+
 
 ---
 
