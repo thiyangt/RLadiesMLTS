@@ -706,6 +706,13 @@ class: inverse, center, middle
 background-image: url(img/forest.jpg)
 background-size: content
 
+---
+
+```{r   out.width = "100%", echo = FALSE, fig.cap=''}
+knitr::include_graphics("img/wolf.png")
+```
+
+Source: https://theblue.ai/blog/lime-models-explanation/
 
 ---
 
@@ -732,7 +739,6 @@ library(explainer)
 ```
 
 ---
-class: inverse, center, middle
 background-image: url(img/ice1.png)
 background-size: contain
 
@@ -740,21 +746,19 @@ background-size: contain
 
 
 ---
-class: inverse, center, middle
 background-image: url(img/ice2.png)
 background-size: contain
 
 ## Partial dependence plots and ICE curves
 
 ---
-class: inverse, center, middle
+
 background-image: url(img/ice3.png)
 background-size: contain
 
 ## Partial dependence plots and ICE curves
 
 ---
-class: inverse, center, middle
 background-image: url(img/ice4.png)
 background-size: contain
 
