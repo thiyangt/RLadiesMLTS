@@ -14,8 +14,13 @@ output:
       highlightLines: true
       countIncrementalSlides: false
 ---
+## About me
 
+```{r, comment=NA, echo=FALSE}
+knitr::include_url("https://thiyanga.netlify.app/")
+```
 
+---
 
 background-image: url(img/jhu.png)
 background-size: contain
